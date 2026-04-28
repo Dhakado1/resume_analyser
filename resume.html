@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Resume Screening AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #f5f7fa;
+}
+
+/* Header */
+header {
+    background: linear-gradient(90deg, #002244, #005b96);
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+/* Full Layout */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 80vh;
+    padding: 30px;
+}
+
+/* Upload Card */
+form {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+    width: 40%;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+/* BIG upload box */
+input[type="file"] {
+    width: 100%;
+    padding: 15px;
+    border: 2px dashed #005b96;
+    border-radius: 8px;
+    background: #f0f4fa;
+    cursor: pointer;
+}
+
+/* Button */
+input[type="submit"] {
+    padding: 12px 30px;
+    background: #005b96;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background: #003f6b;
+}
+
+/* Results Grid */
+.results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 80%;
+    margin-top: 30px;
+}
+
+/* Cards */
+.info-block {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+/* Text */
+h2 {
+    text-align: center;
+}
+
+.message {
+    color: red;
+    text-align: center;
+}
+
+.empty-text {
+    margin-top: 15px;
+    color: #555;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .results {
+        grid-template-columns: 1fr;
+    }
+    form {
+        width: 90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>AI-Powered Resume Screening</h1>
+<p>Upload your resume and let AI analyze it</p>
+</header>
+
+<div class="container">
+
+<h2>Upload Your Resume</h2>
+
+<form action="/pred" method="post" enctype="multipart/form-data">
+<input type="file" name="resume" accept=".pdf, .txt" required>
+<input type="submit" value="Submit">
+</form>
+
+<p class="empty-text">Upload a resume to see results</p>
+
+{% if message %}
+<p class="message">{{ message }}</p>
+{% endif %}
+
+{% if predicted_category %}
+
+<div class="results">
+
+<div class="info-block">
+<h3>Predicted Results</h3>
+<p><strong>Category:</strong> {{ predicted_category }}</p>
+<p><strong>Recommended Job:</strong> {{ recommended_job }}</p>
+</div>
+
+<div class="info-block">
+<h3>Basic Info</h3>
+<p><strong>Name:</strong> {{ name }}</p>
+<p><strong>Phone:</strong> {{ phone }}</p>
+<p><strong>Email:</strong> {{ email }}</p>
+</div>
+
+<div class="info-block">
+<h3>Skills</h3>
+<ul>
+{% for skill in extracted_skills %}
+<li>{{ skill }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<div class="info-block">
+<h3>Education</h3>
+<ul>
+{% for edu in extracted_education %}
+<li>{{ edu }}</li>
+{% endfor %}
+</ul>
+</div>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>
